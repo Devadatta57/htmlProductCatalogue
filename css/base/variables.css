@@ -1,0 +1,74 @@
+/*
+  Design tokens: colours, font, radii, shadows. Every stylesheet reads these.
+
+  Breakpoints used across the stylesheets (CSS custom properties can't be used inside
+  media queries, so they are listed here for reference):
+    ≥ 2000px  very wide screens (1440p, 4K): 4 family cards per row
+    ≤ 1400px  laptops: tighter Product Index table
+    ≤ 1100px  group tiles 3 per row
+    ≤ 1000px  tablets: Product Index rows become cards, its dropdowns 3 equal columns; tighter tabs
+    ≤  999px  family cards 2 per row
+    ≤  900px  hero: upright tablets full-width text above the picture, sideways screens (from
+              600px) text beside the picture; Compare rows stack; viewer tool labels hidden
+    ≤  760px  viewer products panel moves under the picture
+    ≤  720px  section tabs: icon above the label, count in the corner
+    ≤  640px  phones: group tiles 2 per row, full-bleed navy panels, stacked filters
+    ≤  560px  family cards 1 per row
+    ≤  480px  viewer: one row of tools
+    ≤  420px  small phones: hero rupee figures get a full row each
+    ≤  400px  small phones: smaller Product Index captions
+    height ≤ 500px (landscape phones): shorter viewer top bar
+*/
+:root {
+  /* Brand */
+  --color-ink: #15240f;
+  --color-green-900: #0f3d1a;
+  --color-green-800: #14532d;
+  --color-green-700: #0e7a1c;
+  --color-green-600: #1a8a24;
+  --color-green-100: #e8f5e4;
+  --color-orange-500: #f26a1b;
+
+  /* Explorer toolbar + group list */
+  --color-blue-400: #1a8bff;
+  --color-blue-500: #007bff;
+  --color-blue-600: #036cee;
+  --color-blue-700: #0353c9;
+  --color-navy-700: #18509f;
+  --color-navy-800: #0e3776;
+  --color-navy-900: #0a2c63;
+  --color-amber-400: #f6b85c;
+  --color-search-ink: #13254a;
+
+  /* Neutrals */
+  --color-white: #ffffff;
+  --color-text: #3b3f3c;
+  --color-border: #e3e8e3;
+  --color-page: #f4f6f3;
+
+  /* Trade figures */
+  --color-export: #19801f;
+  --color-import: #e3141c;
+  --color-net: #1d5fd1;
+
+  /* The blue used for selected buttons, the search button and section icons */
+  --gradient-blue: linear-gradient(180deg, var(--color-blue-400) 0%, var(--color-blue-500) 55%, #0572f2 100%);
+
+  /* Navy panels (Product Index, Compare) */
+  --gradient-navy-panel: radial-gradient(120% 80% at 50% 0%, #102449 0%, #0b1a35 55%, #08142a 100%);
+
+  /* Focus ring */
+  --focus-ring: #9cc8ff;
+
+  /* Type */
+  --font-sans: 'Ubuntu', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: ui-monospace, Menlo, Consolas, monospace;
+
+  /* Shape & depth */
+  --radius-card: 18px;
+  --radius-pill: 999px;
+  --shadow-card: 0 10px 30px rgba(15, 61, 26, 0.08), 0 2px 6px rgba(15, 61, 26, 0.05);
+
+  /* Page side padding; the explorer and its pinned bar use it */
+  --gutter: clamp(16px, 2.2vw, 36px);
+}

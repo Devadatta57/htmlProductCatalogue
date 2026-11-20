@@ -1,0 +1,278 @@
+/*
+  Hero: one screen tall on desktops, so the whole header shows without scrolling, but never
+  taller than the food spread, so there is no empty band above it. The picture is at most 66%
+  of the width (1445 × 1088, so 66% ÷ 1.328 ≈ 49.7% of the width tall). It is a minimum height,
+  so the hero still grows if the text ever needs more room.
+  Inside, sizes use min(cqw, svh) so text and picture shrink with whichever is tighter:
+  the width or the screen height. ≤ 900px: text above the food spread, hero hugs both.
+*/
+.hero {
+  position: relative;
+  container-type: inline-size;
+  display: flex;
+  align-items: center;
+  min-height: 100vh;
+  min-height: min(100vh, 49.7vw);
+  min-height: min(100svh, 49.7vw);
+  overflow: hidden;
+  background:
+    radial-gradient(90% 60% at 0% 100%, #edf7e8 0%, rgba(237, 247, 232, 0) 70%),
+    linear-gradient(180deg, #ffffff 0%, #fdfefc 55%, #f3f9f0 100%);
+  isolation: isolate;
+}
+
+.hero__wave {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 14%;
+  z-index: 0;
+}
+
+/* Food spread: its white background is multiplied away into the hero gradient */
+.hero__visual {
+  position: absolute;
+  top: 0;
+  right: -2cqw;
+  height: 100%;
+  width: auto;
+  max-width: 66cqw;
+  object-fit: contain;
+  object-position: right bottom;
+  mix-blend-mode: multiply;
+  z-index: 1;
+  pointer-events: none;
+  user-select: none;
+}
+
+.hero__content {
+  position: relative;
+  z-index: 2;
+  max-width: 42cqw;
+  padding: 0 0 2cqw 4.7cqw;
+}
+
+.hero__title {
+  position: relative;
+  margin: 0;
+  font-size: clamp(32px, min(4.2cqw, 8.4svh), 76px);
+  font-weight: 700;
+  line-height: 1.07;
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+}
+
+.hero__line {
+  display: block;
+}
+
+.hero__line--highlight {
+  color: var(--color-orange-500);
+}
+
+.hero__description {
+  max-width: min(30cqw, 58svh);
+  margin: min(2cqw, 3.6svh) 0 0;
+  padding-left: 14px;
+  border-left: 4px solid var(--color-green-700);
+  font-size: clamp(15px, min(1.3cqw, 2.5svh), 22px);
+  line-height: 1.45;
+  color: #1f2a1c;
+}
+
+/*
+  Key figures: three count cards on the first row, the two wide rupee figures on the second
+  (6-column grid: counts span 2, wide cards span 3).
+*/
+.hero__stats {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: clamp(8px, min(0.7cqw, 1.3svh), 12px);
+  max-width: min(36cqw, 74svh);
+  margin: min(2.2cqw, 3.8svh) 0 0;
+  padding: 0;
+}
+
+.hero__stat {
+  grid-column: span 2;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  padding: clamp(8px, min(0.75cqw, 1.4svh), 14px) clamp(10px, min(0.95cqw, 1.8svh), 16px);
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  box-shadow: 0 4px 14px rgba(15, 61, 26, 0.06);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+
+.hero__stat--wide {
+  grid-column: span 3;
+}
+
+/* The figure reads first, its label underneath (dt stays first in the markup) */
+.hero__stat-value {
+  order: -1;
+  margin: 0;
+  font-size: clamp(15px, min(1.4cqw, 2.7svh), 24px);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--color-ink);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.hero__stat--wide .hero__stat-value {
+  color: var(--color-green-700);
+}
+
+.hero__stat-label {
+  font-size: clamp(11px, min(0.85cqw, 1.7svh), 14px);
+  font-weight: 500;
+  line-height: 1.3;
+  color: #5b6558;
+}
+
+/* ---------- Tablet / phone: compact stack, text above the food spread ---------- */
+@media (max-width: 900px) {
+  /* Exactly as tall as the text and picture: no empty space above the title or below the picture */
+  .hero {
+    min-height: 0;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+  }
+
+  .hero__content {
+    max-width: none;
+    padding: clamp(24px, 5vw, 40px) 20px 4px;
+  }
+
+  .hero__title {
+    font-size: clamp(30px, 8vw, 48px);
+  }
+
+  .hero__description {
+    max-width: 480px;
+    margin-top: 14px;
+    padding-left: 12px;
+    font-size: 16px;
+  }
+
+  .hero__stats {
+    max-width: 520px;
+    margin-top: 18px;
+  }
+
+  .hero__stat-value {
+    font-size: 17px;
+  }
+
+  .hero__stat-label {
+    font-size: 12px;
+  }
+
+  .hero__visual {
+    order: 2;
+    position: relative;
+    top: auto;
+    right: auto;
+    flex: none;
+    width: 118%;
+    max-width: none;
+    height: auto;
+    /* Tablets: keep the food spread under ~60% of the screen so the page below shows sooner */
+    max-height: 58vh;
+    max-height: 58svh;
+    object-fit: contain;
+    object-position: center bottom;
+    margin: 12px 0 0 -9%;
+  }
+
+  .hero__wave {
+    height: 22%;
+  }
+}
+
+/*
+  Tablets upright (641–900px): the text uses the full width, so there is no empty strip on
+  its right: the title runs on (two lines), the description spans the width and the five
+  figures sit in one row (from 700px; below that, two full-width rows).
+*/
+@media (min-width: 641px) and (max-width: 900px) and (orientation: portrait) {
+  .hero__line {
+    display: inline;
+  }
+
+  .hero__line + .hero__line::before {
+    content: ' ';
+  }
+
+  .hero__description {
+    max-width: none;
+  }
+
+  .hero__stats {
+    max-width: none;
+  }
+}
+
+@media (min-width: 700px) and (max-width: 900px) and (orientation: portrait) {
+  .hero__stats {
+    grid-template-columns: repeat(3, minmax(0, 2fr)) repeat(2, minmax(0, 3fr));
+  }
+
+  .hero__stat,
+  .hero__stat--wide {
+    grid-column: auto;
+  }
+}
+
+/*
+  Phones and small tablets on their side (600–900px wide, wider than tall): text on the left,
+  the food spread on the right, like the desktop layout, so neither side is left empty.
+*/
+@media (min-width: 600px) and (max-width: 900px) and (orientation: landscape) {
+  .hero {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .hero__content {
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 20px 12px 20px 20px;
+  }
+
+  .hero__title {
+    font-size: clamp(28px, min(6vw, 10svh), 44px);
+  }
+
+  .hero__description {
+    margin-top: 12px;
+    font-size: 15px;
+  }
+
+  .hero__stats {
+    margin-top: 14px;
+  }
+
+  .hero__visual {
+    flex: 0 0 46%;
+    width: 46%;
+    max-height: none;
+    margin: 0 -1% 0 0;
+    object-position: right center;
+  }
+}
+
+/* Small phones: rupee figures get a full row each so they never clip */
+@media (max-width: 420px) {
+  .hero__stat--wide {
+    grid-column: span 6;
+  }
+}

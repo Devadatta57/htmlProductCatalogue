@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>All Screen Sizes · FEED Export Product Catalogue</title>
+<!--
+  Dev helper (not part of the site): the live catalogue (../index.html) at every common screen
+  size, smallest to largest. Double-click this file, or open /dev/screens.html on a local server.
+  Each screen is a real page: scroll, click, search and open the viewer inside any of them.
+  Screens wider than the window are shrunk to fit (the caption says by how much).
+-->
+<style>
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: #eef1f5;
+    color: #13213a;
+    font: 13px/1.4 system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  }
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 14px;
+    padding: 10px 16px;
+    background: rgba(255, 255, 255, 0.94);
+    border-bottom: 1px solid #dde3ec;
+    backdrop-filter: blur(8px);
+  }
+  header h1 { margin: 0; font-size: 15px; }
+  header a { color: #0353c9; font-weight: 600; text-decoration: none; }
+  header a:hover { text-decoration: underline; }
+  nav { display: flex; flex-wrap: wrap; gap: 6px; }
+  nav a {
+    padding: 4px 10px;
+    border: 1px solid #cfe0fb;
+    border-radius: 999px;
+    background: #f2f7ff;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+  main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+    padding: 16px;
+  }
+  figure { margin: 0; scroll-margin-top: 70px; }
+  figcaption {
+    margin-bottom: 6px;
+    color: #5d6b82;
+    font-weight: 600;
+  }
+  figcaption span { font-weight: 400; }
+  .screen {
+    position: relative;
+    overflow: hidden;
+    border: 6px solid #1b2433;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 10px 24px -10px rgba(10, 30, 70, .45);
+  }
+  .screen iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border: 0;
+    transform-origin: 0 0;
+    background: #fff;
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>FEED Export Product Catalogue · all screen sizes</h1>
+  <nav id="jump" aria-label="Jump to a screen size"></nav>
+  <a href="../index.html" target="_blank" rel="noopener">Open the full page ↗</a>
+</header>
+<main id="main"></main>
+<script>
+  const PAGE = '../index.html';
+  const screens = [
+    ['Small phone', 320, 568],
+    ['Android phone', 360, 800],
+    ['iPhone', 390, 844],
+    ['Large phone', 430, 932],
+    ['Phone landscape', 844, 390],
+    ['iPad portrait', 768, 1024],
+    ['iPad Air portrait', 820, 1180],
+    ['iPad landscape', 1024, 768],
+    ['Small laptop', 1280, 800],
+    ['Laptop', 1366, 768],
+    ['MacBook', 1440, 900],
+    ['Full HD monitor', 1920, 1080],
+    ['2K monitor', 2560, 1440],
+    ['4K monitor', 3840, 2160],
+  ];
+
+  const main = document.getElementById('main');
+  const jump = document.getElementById('jump');
+
+  const frames = screens.map(([name, w, h], i) => {
+    const id = `screen-${w}x${h}`;
+    const fig = document.createElement('figure');
+    fig.id = id;
+    fig.innerHTML = `<figcaption>${name} · ${w} × ${h} <span></span></figcaption><div class="screen"><iframe title="${name} ${w} by ${h}"></iframe></div>`;
+    const iframe = fig.querySelector('iframe');
+    iframe.width = w;
+    iframe.height = h;
+    // The first few load straight away, the rest as they are scrolled to
+    if (i > 3) iframe.loading = 'lazy';
+    iframe.src = PAGE;
+    main.appendChild(fig);
+
+    const link = document.createElement('a');
+    link.href = `#${id}`;
+    link.textContent = `${w}×${h}`;
+    link.title = name;
+    jump.appendChild(link);
+
+    return { w, h, box: fig.querySelector('.screen'), iframe, note: fig.querySelector('figcaption span') };
+  });
+
+  // Real size when it fits the window; bigger screens are shrunk to the window's width
+  function layout() {
+    const avail = main.clientWidth - 32 - 12; // page padding + frame border
+    for (const f of frames) {
+      const s = Math.min(avail / f.w, 1);
+      f.box.style.width = `${Math.round(f.w * s) + 12}px`;
+      f.box.style.height = `${Math.round(f.h * s) + 12}px`;
+      f.iframe.style.transform = `scale(${s})`;
+      f.note.textContent = s < 1 ? `(shown at ${Math.round(s * 100)}%)` : '(actual size)';
+    }
+  }
+
+  window.addEventListener('resize', layout);
+  layout();
+</script>
+</body>
+</html>

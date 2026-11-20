@@ -1,0 +1,510 @@
+/*
+  Product family card: grey plaster card; number badge + group, title and HS line; the
+  infographic in a white panel; Compare tick, matching products, then Export / Import / Net.
+  Sizes follow the card's own width (--cq is 1% of it), so every card looks the same whether
+  the grid shows 1, 2, 3 or 4 per row.
+*/
+.sheet-card {
+  /* Browsers without subgrid: the card is its own size container */
+  container-type: inline-size;
+  --cq: 1cqi;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-width: 0;
+  padding: 8px;
+  /*
+    Light grey embossed-plaster texture: SVG noise lit from the top-left so it reads as
+    raised stucco, kept to a narrow light range so text stays clear.
+  */
+  background-color: #ebebeb;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='t' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.035' numOctaves='4' seed='3' stitchTiles='stitch'/%3E%3CfeDiffuseLighting surfaceScale='2.2' lighting-color='%23ffffff' diffuseConstant='1'%3E%3CfeDistantLight azimuth='225' elevation='50'/%3E%3C/feDiffuseLighting%3E%3CfeComponentTransfer%3E%3CfeFuncR type='linear' slope='0.22' intercept='0.76'/%3E%3CfeFuncG type='linear' slope='0.22' intercept='0.76'/%3E%3CfeFuncB type='linear' slope='0.22' intercept='0.765'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23t)'/%3E%3C/svg%3E");
+  background-size: 300px 300px;
+  border: 1px solid rgba(20, 22, 28, 0.1);
+  border-radius: 22px;
+  box-shadow:
+    0 0 0 1px rgba(20, 22, 28, 0.05),
+    0 2px 4px rgba(20, 22, 28, 0.12),
+    0 12px 26px rgba(20, 22, 28, 0.2);
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+/*
+  Heading, picture panel and Compare + figures are the card's three rows, shared with the
+  cards beside it in the grid, so they line up across the row. A size container can't share
+  its parent's rows, so here the card grid is the container (css/sections/product-families.css)
+  and --cq is worked out from it: (grid width − gaps) ÷ cards per row ÷ 100.
+*/
+@supports (grid-template-rows: subgrid) {
+  .sheet-card {
+    container-type: normal;
+    --cq: calc((100cqi - (var(--cols, 3) - 1) * var(--card-gap, 22px)) / var(--cols, 3) / 100);
+    display: grid;
+    grid-row: span 3;
+    grid-template-rows: subgrid;
+    row-gap: 0;
+    height: auto;
+    /* The space between one row of cards and the next */
+    margin-bottom: var(--card-gap, 22px);
+  }
+}
+
+.sheet-card:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 0 0 1px rgba(20, 22, 28, 0.06),
+    0 4px 8px rgba(20, 22, 28, 0.14),
+    0 18px 34px rgba(20, 22, 28, 0.26);
+}
+
+/* ---------- Product count tag in the top-right corner, in the group colour ---------- */
+.sheet-card__count {
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  z-index: 3;
+  padding: 0.5em 1em 0.5em 1.1em;
+  border-radius: 0 22px 0 14px;
+  background: linear-gradient(135deg, var(--group-color), color-mix(in srgb, var(--group-color) 72%, #000));
+  color: var(--color-white);
+  font-size: clamp(11px, calc(3.2 * var(--cq)), 14px);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  box-shadow: -2px 2px 6px rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+}
+
+/* ---------- Heading block ---------- */
+.sheet-card__head {
+  padding: clamp(6px, calc(2 * var(--cq)), 10px) clamp(6px, calc(2.4 * var(--cq)), 10px) clamp(10px, calc(3 * var(--cq)), 14px);
+}
+
+/* Number badge beside the group name; room is left for the count tag */
+.sheet-card__group-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+  padding-right: clamp(84px, calc(28 * var(--cq)), 120px);
+}
+
+.sheet-card__number {
+  flex: none;
+  padding: 0.3em 0.6em;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--group-color), color-mix(in srgb, var(--group-color) 72%, #000));
+  color: var(--color-white);
+  font-size: clamp(14px, calc(5 * var(--cq)), 22px);
+  font-weight: 700;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+.sheet-card__group {
+  margin: 0;
+  font-size: clamp(11px, calc(3.4 * var(--cq)), 15px);
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: #1450a8;
+}
+
+.sheet-card__title {
+  margin: 0.35em 0 0;
+  font-size: clamp(15px, calc(4.6 * var(--cq)), 21px);
+  font-weight: 700;
+  line-height: 1.25;
+  color: #10192b;
+}
+
+.sheet-card__meta {
+  margin: 0.45em 0 0;
+  font-size: clamp(12px, calc(3.5 * var(--cq)), 15.5px);
+  line-height: 1.4;
+  color: #2a3040;
+}
+
+/* ---------- White panel holding the infographic ---------- */
+.sheet-card__panel {
+  position: relative;
+  padding: 7px;
+  background: var(--color-white);
+  border-radius: 16px;
+  box-shadow:
+    0 0 0 1px rgba(15, 23, 42, 0.05),
+    0 2px 4px rgba(15, 23, 42, 0.06),
+    0 6px 16px -4px rgba(15, 23, 42, 0.12);
+  transition:
+    transform 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.2),
+    box-shadow 0.35s ease;
+}
+
+/* Pointing at the picture lifts it out of the card toward the viewer (mouse only) */
+@media (hover: hover) and (pointer: fine) {
+  .sheet-card:has(.sheet-card__thumb:hover) {
+    z-index: 5;
+  }
+
+  .sheet-card__panel:has(.sheet-card__thumb:hover) {
+    z-index: 4;
+    transform: scale(1.1) translateY(-4px);
+    box-shadow:
+      0 0 0 1px rgba(15, 23, 42, 0.06),
+      0 10px 20px rgba(15, 23, 42, 0.18),
+      0 28px 50px -10px rgba(15, 23, 42, 0.4);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sheet-card__panel:has(.sheet-card__thumb:hover) {
+    transform: none;
+  }
+}
+
+/* Every sheet picture is made in this 1199:1312 shape, so it fills the frame without cropping */
+.sheet-card__thumb {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 1199 / 1312;
+  background: #f4f6f9;
+  border-radius: 11px;
+  box-shadow:
+    0 0 0 1px rgba(15, 23, 42, 0.08),
+    0 2px 8px rgba(15, 23, 42, 0.1);
+}
+
+.sheet-card__thumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.sheet-card__no-image {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  color: #7a869c;
+  font-size: 14px;
+}
+
+/* Invisible button over the picture: click / tap opens the full-screen viewer */
+.sheet-card__open {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  padding: 0;
+  border: 0;
+  border-radius: inherit;
+  background: transparent;
+  cursor: zoom-in;
+  transition: background 0.15s ease;
+}
+
+.sheet-card__open:hover {
+  background: rgba(10, 30, 70, 0.06);
+}
+
+.sheet-card__open:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: -3px;
+}
+
+/* ---------- Compare + figures ---------- */
+.sheet-card__info {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: clamp(4px, calc(1.4 * var(--cq)), 8px) clamp(6px, calc(2.4 * var(--cq)), 10px);
+}
+
+/* Compare: square tick box */
+.sheet-card__compare {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: 7px;
+  flex: none;
+  margin-top: 0.6em;
+  font-size: clamp(12px, calc(3.6 * var(--cq)), 15px);
+  font-weight: 700;
+  color: #1a2233;
+  cursor: pointer;
+  user-select: none;
+}
+
+.sheet-card__compare input {
+  appearance: none;
+  display: grid;
+  place-items: center;
+  width: 1.3em;
+  height: 1.3em;
+  margin: 0;
+  border: 2px solid #1a2233;
+  border-radius: 5px;
+  background: var(--color-white);
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.sheet-card__compare input::after {
+  content: '';
+  width: 0.36em;
+  height: 0.66em;
+  margin-top: -0.12em;
+  border: solid var(--color-white);
+  border-width: 0 2.5px 2.5px 0;
+  transform: rotate(45deg) scale(0);
+  transition: transform 0.12s ease;
+}
+
+.sheet-card__compare input:checked {
+  background: var(--color-blue-500);
+  border-color: var(--color-blue-500);
+}
+
+.sheet-card__compare input:checked::after {
+  transform: rotate(45deg) scale(1);
+}
+
+.sheet-card__compare input:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.sheet-card__compare:has(input:disabled) {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.sheet-card__compare input:disabled {
+  cursor: not-allowed;
+}
+
+/* Products that matched the search */
+.sheet-card__hits {
+  margin: 0.6em 0 0;
+  padding: 6px 9px;
+  list-style: none;
+  font-size: clamp(11px, calc(3.2 * var(--cq)), 13px);
+  line-height: 1.4;
+  color: #3d4c42;
+  background: #fff8dc;
+  border: 1px solid #efdf9b;
+  border-radius: 9px;
+}
+
+.sheet-card__hits code {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: #7a5600;
+}
+
+/* Figures pinned to the bottom of the card so rows line up across cards */
+.sheet-card__stats-wrap {
+  margin-top: auto;
+  padding-top: clamp(3px, calc(1.2 * var(--cq)), 6px);
+}
+
+/* Export, Import, Net one below the other: icon + label left, figure right */
+.sheet-card__stats {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+}
+
+.sheet-card__stat {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6em;
+  min-width: 0;
+  padding: 0 clamp(4px, calc(1.4 * var(--cq)), 8px);
+  border-radius: 6px;
+  transition:
+    background-color 0.18s ease,
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+/* Pointing at a row enlarges just that row and tints it in its own colour */
+.sheet-card__stat:hover {
+  position: relative;
+  z-index: 1;
+  transform: scale(1.08);
+  background: color-mix(in srgb, var(--stat-color) 12%, var(--color-white));
+  box-shadow: 0 4px 12px -4px color-mix(in srgb, var(--stat-color) 45%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sheet-card__stat:hover {
+    transform: none;
+  }
+}
+
+.sheet-card__stat--export {
+  --stat-color: var(--color-export);
+}
+
+.sheet-card__stat--import {
+  --stat-color: var(--color-import);
+}
+
+.sheet-card__stat--net {
+  --stat-color: var(--color-net);
+}
+
+.sheet-card__stat dt {
+  display: flex;
+  align-items: center;
+  gap: 0.45em;
+  font-size: clamp(11px, calc(3.4 * var(--cq)), 14.5px);
+  font-weight: 600;
+  line-height: 1.1;
+  color: #2f3747;
+}
+
+.sheet-card__stat dd {
+  margin: 0;
+  font-size: clamp(12px, calc(3.8 * var(--cq)), 16.5px);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.sheet-card__value--export {
+  color: var(--color-export);
+}
+
+.sheet-card__value--import {
+  color: var(--color-import);
+}
+
+.sheet-card__value--net {
+  color: #0d1117;
+}
+
+/* ---------- Trade icons (solid, in the row's colour), always gently animated ---------- */
+.trade-icon {
+  display: block;
+  flex: none;
+  width: clamp(12px, calc(4.2 * var(--cq)), 17px);
+  height: clamp(12px, calc(4.2 * var(--cq)), 17px);
+  color: var(--stat-color);
+}
+
+.trade-icon [data-part] {
+  transform-box: view-box;
+}
+
+/* Export: the ship sails and bobs while the waves roll past */
+.trade-icon [data-part='ship'] {
+  transform-origin: 12px 16px;
+  animation: ship-sail 1.6s ease-in-out infinite;
+}
+
+.trade-icon [data-part='waves'] {
+  animation: waves-roll 0.9s linear infinite;
+}
+
+/* Import: the crane lowers the container, then lifts it back up */
+.trade-icon [data-part='rope'] {
+  transform-origin: 12px 1px;
+  animation: rope-stretch 1.8s ease-in-out infinite;
+}
+
+.trade-icon [data-part='load'] {
+  animation: load-lower 1.8s ease-in-out infinite;
+}
+
+/* Net: the beam tips one way, then the other, like it is weighing */
+.trade-icon [data-part='beam'] {
+  transform-origin: 12px 7.3px;
+  animation: beam-weigh 1.8s ease-in-out infinite;
+}
+
+@keyframes ship-sail {
+  0%,
+  100% {
+    transform: translate(-1px, 0) rotate(-3deg);
+  }
+  50% {
+    transform: translate(1px, -1px) rotate(3deg);
+  }
+}
+
+@keyframes waves-roll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-6px);
+  }
+}
+
+@keyframes load-lower {
+  0%,
+  15%,
+  100% {
+    transform: translateY(0);
+  }
+  55%,
+  70% {
+    transform: translateY(2.5px);
+  }
+}
+
+/* The rope is 3.6 units long; +2.5 when the load is down */
+@keyframes rope-stretch {
+  0%,
+  15%,
+  100% {
+    transform: scaleY(1);
+  }
+  55%,
+  70% {
+    transform: scaleY(1.7);
+  }
+}
+
+@keyframes beam-weigh {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-10deg);
+  }
+  60% {
+    transform: rotate(7deg);
+  }
+  80% {
+    transform: rotate(-3deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trade-icon [data-part] {
+    animation: none;
+  }
+}
+
+/* Touch screens: no hover lift on cards (a tap would leave them raised) */
+@media (hover: none) {
+  .sheet-card:hover,
+  .sheet-card__stat:hover {
+    transform: none;
+  }
+}

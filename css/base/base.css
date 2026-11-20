@@ -1,0 +1,94 @@
+/* Page-wide basics: body, icons, screen-reader text, skip link, focus, reduced motion. */
+body {
+  font-family: var(--font-sans);
+  color: var(--color-text);
+  background: var(--color-page);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* The page sits on white (the hero paints its own background) */
+.page {
+  background: var(--color-white);
+}
+
+/*
+  Icons: <svg class="icon"><use href="#i-name"></use></svg>, drawn from the sprite at the top of
+  index.html. They take the text colour; set --sw on one to change its stroke width.
+*/
+.icon {
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: var(--sw, 2);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  overflow: visible;
+}
+
+/* Text for screen readers only */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Keyboard users can jump straight past the hero to the catalogue */
+.skip-link {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 100;
+  padding: 10px 16px;
+  border-radius: var(--radius-pill);
+  background: var(--color-navy-800);
+  color: var(--color-white);
+  font-weight: 700;
+  text-decoration: none;
+  transform: translateY(-160%);
+  transition: transform 0.15s ease;
+}
+
+.skip-link:focus {
+  transform: none;
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* Search words found in a name or code */
+mark {
+  padding: 0 1px;
+  border-radius: 3px;
+  background: #ffe27a;
+  color: inherit;
+}
+
+/* Shown only when scripts are off */
+.noscript {
+  margin: 24px var(--gutter);
+  padding: 16px 20px;
+  border: 1px solid #f3d58a;
+  border-radius: 12px;
+  background: #fff8e3;
+  color: #6b4d00;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+/* People who ask for less motion get none */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

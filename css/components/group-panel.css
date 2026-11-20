@@ -1,0 +1,172 @@
+/*
+  Product groups block above the family cards: white card, "All 10 groups" button, then the
+  10 group tiles (5 per row on desktops, 3 on tablets, 2 on phones).
+*/
+.group-panel {
+  padding: 14px 16px 16px;
+  background: var(--color-white);
+  border: 0;
+  border-radius: 18px;
+  /* No border line: just a soft light shadow around the block */
+  box-shadow:
+    0 14px 34px rgba(0, 0, 0, 0.1),
+    0 3px 10px rgba(0, 0, 0, 0.06);
+}
+
+/* ---------- Header row ---------- */
+.group-panel__head {
+  display: flex;
+  margin-bottom: 12px;
+}
+
+.group-panel__all {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 6px 0 14px;
+  border: 1.5px solid #cfe0fb;
+  border-radius: var(--radius-pill);
+  background: #f2f7ff;
+  color: var(--color-navy-800);
+  font: 700 13.5px/1 var(--font-sans);
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.group-panel__all:hover {
+  background: #e4efff;
+}
+
+/* Selected: same blue as the selected toolbar tab */
+.group-panel__all[aria-pressed='true'] {
+  border-color: transparent;
+  background: var(--gradient-blue);
+  color: var(--color-white);
+}
+
+/* ---------- Tiles ---------- */
+.group-panel__grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.group-panel__tile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  height: 100%;
+  min-height: 58px;
+  padding: 9px 10px 9px 11px;
+  border: 0;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #124083 0%, var(--color-navy-800) 50%, var(--color-navy-900) 100%);
+  color: var(--color-white);
+  font: 500 13.5px/1.25 var(--font-sans);
+  text-align: left;
+  cursor: pointer;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.2),
+    0 2px 5px rgba(10, 40, 100, 0.18);
+  transition:
+    background 0.15s ease,
+    transform 0.15s ease;
+}
+
+.group-panel__tile:hover {
+  background: linear-gradient(180deg, #1a4d99 0%, #134288 50%, #0e3776 100%);
+  transform: translateY(-1px);
+}
+
+.group-panel__tile:focus-visible,
+.group-panel__all:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* Selected group: the selected blue, a group-colour edge, amber count */
+.group-panel__tile[aria-pressed='true'],
+.group-panel__tile[aria-pressed='true']:hover {
+  background: var(--gradient-blue);
+  box-shadow:
+    inset 0 0 0 2px var(--group-color),
+    0 6px 14px -6px rgba(10, 40, 100, 0.5);
+}
+
+/* Group's icon in its own colour on a white disc */
+.group-panel__icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--color-white);
+  color: var(--group-color, var(--color-navy-800));
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+}
+
+.group-panel__label {
+  flex: 1;
+  min-width: 0;
+}
+
+.group-panel__count {
+  flex: none;
+  display: grid;
+  place-items: center;
+  min-width: 26px;
+  height: 24px;
+  padding: 0 7px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.3);
+  color: var(--color-white);
+  font-size: 13px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.group-panel__all .group-panel__count {
+  background: var(--color-navy-800);
+}
+
+.group-panel__tile[aria-pressed='true'] .group-panel__count,
+.group-panel__all[aria-pressed='true'] .group-panel__count {
+  background: var(--color-amber-400);
+}
+
+/* ---------- Smaller screens ---------- */
+@media (max-width: 1100px) {
+  .group-panel__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .group-panel {
+    padding: 12px;
+  }
+
+  .group-panel__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .group-panel__tile {
+    min-height: 54px;
+    gap: 8px;
+    padding: 8px;
+    font-size: 12.5px;
+  }
+
+  .group-panel__icon {
+    width: 28px;
+    height: 28px;
+  }
+}

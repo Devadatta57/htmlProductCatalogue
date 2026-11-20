@@ -1,0 +1,253 @@
+/*
+  Toolbar in the pinned bar.
+  Row 1: the three section tabs in one golden capsule (segmented control).
+  Row 2: the search capsule, full width.
+  ≤ 720px: icon above the label, count badge in the tab's corner (all three still fit).
+*/
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 10px;
+}
+
+/* ---------- Section tabs ---------- */
+.toolbar__tabs {
+  display: flex;
+  align-items: center;
+  flex: 1 1 100%;
+  min-width: 0;
+  gap: 4px;
+  padding: 6px;
+  border-radius: var(--radius-pill);
+  /* Yellow-capsicum gold */
+  background: linear-gradient(180deg, #ffe070 0%, #ffd84a 100%);
+  /* Soft yellow glow around the box, no outline */
+  box-shadow:
+    0 0 14px rgba(255, 200, 0, 0.45),
+    0 6px 14px -8px rgba(190, 140, 0, 0.5);
+}
+
+/* The three tabs share the row equally */
+.toolbar__tab {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1 1 0;
+  gap: 9px;
+  height: 54px;
+  padding: 0 22px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  /* Unselected: flat dark text on the gold */
+  background: transparent;
+  color: #4a3300;
+  font: 700 18px/1 var(--font-sans);
+  white-space: nowrap;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    background 0.15s ease;
+}
+
+.toolbar__tab:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.toolbar__tab:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* Selected tab: blue pill lifted off the gold with a soft shadow */
+.toolbar__tab[aria-pressed='true'] {
+  background: var(--gradient-blue);
+  color: var(--color-white);
+  box-shadow: 0 6px 12px -6px rgba(0, 90, 220, 0.6);
+}
+
+.toolbar__tab .icon {
+  width: 21px;
+  height: 21px;
+}
+
+/* Count badge: deep capsicum amber on unselected tabs, light amber on the selected one */
+.toolbar__badge {
+  display: inline-grid;
+  place-items: center;
+  min-width: 30px;
+  height: 28px;
+  padding: 0 8px;
+  margin-right: -6px;
+  border-radius: var(--radius-pill);
+  background: #e08a00;
+  color: var(--color-white);
+  font-size: 15px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.toolbar__tab[aria-pressed='true'] .toolbar__badge {
+  background: var(--color-amber-400);
+}
+
+/* ---------- Search capsule ---------- */
+.toolbar__search {
+  flex: 1 1 100%;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 50px;
+  margin: 0;
+  padding: 0 6px 0 18px;
+  background: var(--color-white);
+  border: 2px solid #edf5ff;
+  border-radius: var(--radius-pill);
+  /* Soft blue glow */
+  box-shadow:
+    0 0 0 1px rgba(0, 110, 255, 0.16),
+    0 0 10px rgba(0, 110, 255, 0.16),
+    0 6px 10px -5px rgba(3, 47, 215, 0.42);
+  transition: box-shadow 0.2s ease;
+}
+
+.toolbar__search:focus-within {
+  box-shadow:
+    0 0 0 2px rgba(0, 110, 255, 0.32),
+    0 0 14px rgba(0, 110, 255, 0.22),
+    0 8px 12px -5px rgba(3, 47, 215, 0.5);
+}
+
+.toolbar__search-icon {
+  color: var(--color-search-ink);
+}
+
+.toolbar__search-input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  outline: none;
+  font: 500 15px/1.2 var(--font-sans);
+  color: var(--color-search-ink);
+  text-overflow: ellipsis;
+}
+
+.toolbar__search-input::placeholder {
+  color: var(--color-search-ink);
+  opacity: 1;
+}
+
+.toolbar__search-input::-webkit-search-cancel-button {
+  cursor: pointer;
+}
+
+.toolbar__send {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--gradient-blue);
+  color: var(--color-white);
+  box-shadow: 0 5px 10px -5px rgba(0, 110, 255, 0.7);
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.toolbar__send:hover {
+  background: linear-gradient(180deg, #0a74f2 0%, var(--color-blue-600) 60%, #045fd8 100%);
+}
+
+.toolbar__send .icon {
+  transition: transform 0.15s ease;
+}
+
+.toolbar__send:hover .icon {
+  transform: translateX(2px);
+}
+
+.toolbar__send:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* ---------- Tablet: tighter tabs so all three still fit on one row ---------- */
+@media (max-width: 1000px) {
+  .toolbar__tab {
+    gap: 7px;
+    padding: 0 12px;
+    font-size: 16px;
+  }
+}
+
+/* ---------- Phone: icon above the label (which may wrap), count in the top corner ---------- */
+@media (max-width: 720px) {
+  .toolbar__tabs {
+    width: 100%;
+    gap: 4px;
+    padding: 5px;
+    border-radius: 24px;
+  }
+
+  .toolbar__tab {
+    flex-direction: column;
+    min-width: 0;
+    gap: 4px;
+    height: auto;
+    min-height: 60px;
+    padding: 8px 6px;
+    border-radius: 19px;
+    font-size: 13.5px;
+    line-height: 1.15;
+    white-space: normal;
+    text-align: center;
+  }
+
+  .toolbar__tab .icon {
+    width: 19px;
+    height: 19px;
+  }
+
+  .toolbar__badge {
+    position: absolute;
+    top: 5px;
+    right: 6px;
+    min-width: 22px;
+    height: 18px;
+    margin: 0;
+    padding: 0 6px;
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 640px) {
+  .toolbar {
+    gap: 10px 8px;
+  }
+
+  .toolbar__search {
+    gap: 8px;
+    height: 48px;
+    padding-left: 14px;
+  }
+
+  /* 16px stops iOS from zooming in when the field is tapped */
+  .toolbar__search-input {
+    font-size: 16px;
+  }
+
+  .toolbar__send {
+    width: 36px;
+    height: 36px;
+  }
+}

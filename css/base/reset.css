@@ -1,0 +1,28 @@
+/* Small modern reset: only what the page relies on. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  /* Phones in landscape must not enlarge the text on their own */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+/* Anything marked hidden stays hidden, whatever display a class gives it */
+[hidden] {
+  display: none !important;
+}

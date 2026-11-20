@@ -1,0 +1,77 @@
+/*
+  Explorer: the pinned toolbar on top, then one of three panels: Product Families (group tiles
+  above the family cards), Product Index or Compare.
+  --bar-h (the pinned bar's live height) is set by js/components/sticky-bar.js.
+*/
+.explorer {
+  min-height: 100vh;
+  min-height: 100svh;
+  padding: 0 var(--gutter) 48px;
+  background: var(--color-white);
+  /* Jumping to the explorer (skip link, "back to the cards") stops right at the bar */
+  scroll-margin-top: 0;
+}
+
+/* ---------- Pinned toolbar + search ---------- */
+.explorer__bar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  margin: 0 calc(-1 * var(--gutter));
+  padding: 16px var(--gutter);
+  background: rgba(255, 255, 255, 0.94);
+  -webkit-backdrop-filter: saturate(1.4) blur(10px);
+  backdrop-filter: saturate(1.4) blur(10px);
+  transition: box-shadow 0.2s ease;
+}
+
+.explorer__bar[data-stuck='true'] {
+  box-shadow: 0 10px 22px -14px rgba(10, 60, 160, 0.35);
+}
+
+/* Focused only by script / the skip link: no ring around the whole area */
+.explorer:focus,
+.explorer__panel:focus {
+  outline: none;
+}
+
+/* Product Families: group tiles above the cards */
+.explorer__families {
+  margin-top: 6px;
+}
+
+.explorer__groups {
+  margin-bottom: 24px;
+}
+
+@media (max-width: 900px) {
+  .explorer__bar {
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+
+  .explorer__families {
+    margin-top: 0;
+  }
+
+  .explorer__groups {
+    margin-bottom: 18px;
+  }
+}
+
+/* Navy panels (Product Index, Compare): shared frame */
+.navy-panel {
+  margin: 6px 0 0;
+  padding: clamp(16px, 2.4vw, 28px) clamp(12px, 2vw, 28px) 24px;
+  border-radius: 18px;
+  background: var(--gradient-navy-panel);
+  color: #fff;
+}
+
+/* Phones: the navy panels run edge to edge */
+@media (max-width: 640px) {
+  .navy-panel {
+    margin: 4px calc(-1 * var(--gutter)) 0;
+    border-radius: 0;
+  }
+}

@@ -1,0 +1,161 @@
+/*
+  Product Families: "Sort by" + "View as" at the top right, then the family cards (3 per row;
+  4 on very wide screens, 2 on tablets, 1 on phones) or the table.
+*/
+.families {
+  min-width: 0;
+}
+
+.families__head {
+  display: flex;
+  justify-content: flex-end;
+  margin: 4px 0 18px;
+}
+
+.families__controls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+}
+
+/* Label + dressed-up native select */
+.families__field {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #5b6882;
+  font-size: 13.5px;
+  font-weight: 500;
+}
+
+.families__select {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.families__select select {
+  appearance: none;
+  height: 38px;
+  max-width: 100%;
+  padding: 0 38px 0 36px;
+  border: 1.5px solid #cfe0fb;
+  border-radius: var(--radius-pill);
+  background: #f2f7ff;
+  color: var(--color-navy-800);
+  font: 700 14px var(--font-sans);
+  text-overflow: ellipsis;
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+
+.families__select select:hover {
+  border-color: var(--color-blue-500);
+}
+
+.families__select select:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.families__select-icon,
+.families__select-chevron {
+  position: absolute;
+  color: var(--color-blue-600);
+  pointer-events: none;
+}
+
+.families__select-icon {
+  left: 14px;
+}
+
+.families__select-chevron {
+  right: 14px;
+}
+
+/* Every row as tall as its tallest card (1fr rows), so all cards come out the same size */
+.families__grid {
+  /* --cols / --card-gap: cards per row and the space between them (the cards read both) */
+  --cols: 3;
+  --card-gap: 22px;
+  display: grid;
+  grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+  grid-auto-rows: 1fr;
+  gap: var(--card-gap);
+}
+
+/*
+  Each card takes three rows (heading, picture, Compare + figures) shared with the cards beside
+  it (subgrid in css/components/sheet-card.css), so pictures, Compare ticks and figures line up
+  across a row even when one title wraps onto an extra line.
+*/
+@supports (grid-template-rows: subgrid) {
+  .families__grid {
+    container-type: inline-size;
+    grid-auto-rows: auto;
+    row-gap: 0;
+  }
+}
+
+.families__empty {
+  padding: 60px 16px;
+  text-align: center;
+  color: #5b667a;
+  background: #f5f9ff;
+  border: 1px dashed #b9d3f3;
+  border-radius: 18px;
+}
+
+.families__empty b {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 20px;
+  color: #10192b;
+}
+
+/* Very wide screens (1440p, 4K): 4 per row so cards don't grow huge */
+@media (min-width: 2000px) {
+  .families__grid {
+    --cols: 4;
+  }
+}
+
+/* Tablet: 2 per row */
+@media (max-width: 999px) {
+  .families__grid {
+    --cols: 2;
+  }
+}
+
+/* Phone: 1 per row; the two dropdowns share the row */
+@media (max-width: 560px) {
+  .families__grid {
+    --cols: 1;
+    --card-gap: 16px;
+  }
+
+  .families__head {
+    justify-content: stretch;
+  }
+
+  .families__controls {
+    width: 100%;
+    flex-wrap: nowrap;
+    gap: 10px;
+  }
+
+  .families__field {
+    flex: 1 1 0;
+    min-width: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 5px;
+    font-size: 12.5px;
+  }
+
+  .families__select select {
+    width: 100%;
+  }
+}

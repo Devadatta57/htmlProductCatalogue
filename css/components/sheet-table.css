@@ -1,0 +1,285 @@
+/*
+  Product Families as a table ("View as: Table"): one row per family with its figures, a mini
+  export vs import bar and a Compare tick. Rows are separate strips (border-spacing) that lift
+  out on hover. Narrower screens scroll the table sideways inside its frame.
+*/
+.sheet-table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid #dfe6f0;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow:
+    0 12px 28px rgba(10, 70, 180, 0.08),
+    0 2px 8px rgba(10, 70, 180, 0.05);
+}
+
+/* Keyboard users can scroll the frame once it has focus */
+.sheet-table-wrap:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.sheet-table {
+  width: 100%;
+  min-width: 1100px;
+  border-collapse: separate;
+  border-spacing: 0 8px;
+  /* Side room so a row enlarged on hover isn't clipped by the scroll box */
+  padding: 0 18px 6px;
+  color: #0c1a33;
+  font-size: 13.5px;
+}
+
+.sheet-table th {
+  position: sticky;
+  top: 0;
+  padding: 12px 11px;
+  /* Orange head row, white text */
+  background: #f57c00;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.sheet-table td {
+  height: 52px;
+  padding: 10px 11px;
+  background: #faf0e6;
+  border-top: 1px solid #e3e9f2;
+  border-bottom: 1px solid #e3e9f2;
+  vertical-align: middle;
+  transition: background 0.18s ease;
+}
+
+/* Rounded ends on each row strip */
+.sheet-table td:first-child {
+  border-left: 1px solid #e3e9f2;
+  border-radius: 12px 0 0 12px;
+}
+
+.sheet-table td:last-child {
+  border-right: 1px solid #e3e9f2;
+  border-radius: 0 12px 12px 0;
+}
+
+.sheet-table th:first-child {
+  border-radius: 12px 0 0 12px;
+}
+
+.sheet-table th:last-child {
+  border-radius: 0 12px 12px 0;
+}
+
+.sheet-table tbody tr {
+  position: relative;
+  filter: drop-shadow(0 1px 2px rgba(10, 40, 100, 0.06));
+  transition:
+    transform 0.18s ease,
+    filter 0.18s ease;
+}
+
+/* Hover: the row grows and lifts out as its own card */
+@media (hover: hover) {
+  .sheet-table tbody tr:hover {
+    z-index: 1;
+    transform: scale(1.025);
+    filter: drop-shadow(0 10px 18px rgba(10, 40, 100, 0.22));
+  }
+
+  .sheet-table tbody tr:hover td {
+    background: #fff7ee;
+    border-color: #f5b46a;
+  }
+}
+
+.sheet-table tbody tr[data-compared='true'] td {
+  background: #eef5ff;
+}
+
+.sheet-table__num {
+  text-align: right !important;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.sheet-table__center {
+  text-align: center !important;
+}
+
+.sheet-table__number {
+  color: #5b6882;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.sheet-table__name {
+  min-width: 210px;
+}
+
+/* Eye button + family name side by side */
+.sheet-table__name-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sheet-table__name-text {
+  color: #0c1a33;
+  font: 700 14px/1.35 var(--font-sans);
+}
+
+/* Eye "view" button: the only thing in the row that opens the viewer */
+.sheet-table__view {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #fff1e2;
+  color: #e06d00;
+  box-shadow: inset 0 0 0 1px #f8cf9f;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.sheet-table__view:hover {
+  background: #f57c00;
+  color: #ffffff;
+  transform: scale(1.12);
+}
+
+.sheet-table__view:focus-visible,
+.sheet-table__check:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.sheet-table__hits {
+  margin: 5px 0 0;
+  color: #7a5600;
+  font-size: 11.5px;
+  line-height: 1.45;
+}
+
+.sheet-table__hits code {
+  font-family: inherit;
+  font-weight: 700;
+}
+
+.sheet-table__group {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 200px;
+  line-height: 1.3;
+}
+
+.sheet-table__group-icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #f1f4f9;
+  box-shadow: inset 0 0 0 1px #e3e8f0;
+}
+
+.sheet-table__hs {
+  min-width: 150px;
+  max-width: 220px;
+  color: #5b6882;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.sheet-table__negative {
+  color: #e8231c;
+}
+
+.sheet-table__bars {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 120px;
+}
+
+.sheet-table__bar {
+  display: block;
+  min-width: 2px;
+  height: 7px;
+  border-radius: 4px;
+}
+
+.sheet-table__bar--export {
+  background: #17701f;
+}
+
+.sheet-table__bar--import {
+  background: #c8161d;
+}
+
+/* Export = green, Import = red: the same colours as the bars and the key */
+.sheet-table__export {
+  color: #17701f;
+  font-weight: 500;
+}
+
+.sheet-table__import {
+  color: #c8161d;
+  font-weight: 500;
+}
+
+/* Colour key under the "Export vs Import" heading */
+.sheet-table__legend {
+  display: flex;
+  gap: 12px;
+  margin-top: 5px;
+  color: #ffffff;
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.sheet-table__legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.sheet-table__legend .sheet-table__bar {
+  width: 14px;
+  min-width: 0;
+}
+
+.sheet-table__check {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: #1f6feb;
+  cursor: pointer;
+}
+
+.sheet-table__check:disabled {
+  cursor: not-allowed;
+}
+
+/* Touch screens: bigger tick for fingers */
+@media (pointer: coarse) {
+  .sheet-table__check {
+    width: 22px;
+    height: 22px;
+  }
+}
